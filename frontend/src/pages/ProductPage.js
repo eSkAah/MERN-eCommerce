@@ -1,13 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button, Col, Image, ListGroup, Row } from "react-bootstrap";
 import { Rating } from "../components/Rating";
-import products from "../products";
 
 export const ProductPage = ({ match }) => {
   const params = useParams();
-  const product = products.find((p) => p._id === params.id);
+  const [product, setProduct] = useState({});
 
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const response = await fetch(`/api/products/${params.id}`);
+      const data = await response.json();
+      setProduct(data);
+    };
+    fetchProduct();
+  }, [params.id]);
   return (
     <>
       <Link className="btn btn-dark my-3" to="/">
